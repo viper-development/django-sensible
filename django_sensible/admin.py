@@ -71,3 +71,7 @@ class ModelAdmin(admin.ModelAdmin):
         self.list_editable = self.get_list_editable(request)
 
         return super().get_changelist_instance(request)
+
+
+class TabularInline(admin.TabularInline):
+    extra = 1
