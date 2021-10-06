@@ -34,6 +34,15 @@ def is_field_editable(field):
             or isinstance(field, models.BooleanField))
 
 
+def is_field_string(field):
+    """
+    Prefer CharField for now.
+    TextField could be used as string.
+    However, it is more likely to be used for big text.
+    """
+    return isinstance(field, models.CharField)
+
+
 class ModelAdmin(admin.ModelAdmin):
     """
     Generic ModelAdmin with shortcuts.
@@ -71,6 +80,10 @@ class ModelAdmin(admin.ModelAdmin):
         self.list_editable = self.get_list_editable(request)
 
         return super().get_changelist_instance(request)
+
+    def get_search_fields(self, request):
+        return [field.name for field in self.get_model_fields()
+                if is_field_string(field)]
 
 
 class TabularInline(admin.TabularInline):
